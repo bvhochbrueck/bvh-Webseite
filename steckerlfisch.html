@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Steckerlfisch — Burschenverein Hochbrück</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <div id="site-header"></div>
+  <main class="container">
+    <h2>Steckerlfisch</h2>
+    <p>Hier kannst du dich für Steckerlfisch‑Schichten/Bestellungen anmelden.</p>
+
+    <!-- PASTE GOOGLE FORM EMBED HERE -->
+    <!--
+      So bekommst du den Einbettungs‑Code in Google Forms: oben rechts "Mehr" → "Embed HTML" → Copy. Dann hier den <iframe ...> einfügen.
+      Beispiel:
+      <iframe src="https://docs.google.com/forms/d/e/DEINE_FORM_ID/viewform?embedded=true" width="640" height="800" frameborder="0" marginheight="0" marginwidth="0">Wird geladen…</iframe>
+    -->
+
+    <p>Falls du das Formular nicht einbinden willst: verlinke einfach die Formular‑URL oder nutze eine E‑Mail: <a href="mailto:info@bvhochbrueck.de">info@bvhochbrueck.de</a></p>
+  </main>
+  <div id="site-footer"></div>
+  <script>
+    loadInclude('#site-header','/includes/header.html');
+    loadInclude('#site-footer','/includes/footer.html');
+    window.addEventListener('load',()=>{
+      const nav = document.querySelector('nav'); if(nav){ const links = nav.querySelectorAll('a'); links.forEach(a=>{ if(location.pathname.endsWith(a.getAttribute('href'))){ a.classList.add('active'); } }); }
+    });
+  </script>
+</body>
+</html>
