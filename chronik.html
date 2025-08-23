@@ -1,0 +1,77 @@
+<!-- chronik.html -->
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Chronik — Burschenverein Hochbrück</title>
+  <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body class="page-other has-bg"> <!-- class has-bg sorgt für Hintergrund-Logo -->
+
+  <div id="site-header"></div>
+
+  <main class="container">
+    <h1>Chronik</h1>
+    <p>Hier könnt ihr die Chronik eures Vereins darstellen: Jahreszahlen, wichtige Ereignisse, Fotos und Anekdoten.</p>
+    <!-- Mehr Inhalte hier -->
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+    // gleiche include-Funktion wie auf Index
+    async function loadInclude(id, path){
+      const el = document.getElementById(id);
+      if(!el) return;
+      try {
+        const r = await fetch(path);
+        if(!r.ok) return;
+        el.innerHTML = await r.text();
+        const yearSpan = document.getElementById('year');
+        if(yearSpan) yearSpan.textContent = new Date().getFullYear();
+        markActiveNav();
+        // Dropdown mobile: offen/geschlossen synchronisieren
+        setupDropdowns();
+      } catch(e){ console.warn('Include laden fehlgeschlagen', e); }
+    }
+    function markActiveNav(){
+      const nav = document.querySelector('.main-nav');
+      if(!nav) return;
+      const links = nav.querySelectorAll('a');
+      const cur = location.pathname.split('/').pop() || 'index.html';
+      links.forEach(a=>{
+        if(a.getAttribute('href') === cur) a.classList.add('active');
+      });
+      // Falls Seite in submenu steht: markiere Dropdown-Taste aktiv
+      const active = document.querySelector('.main-nav a.active');
+      if(active){
+        const parent = active.closest('.dropdown');
+        if(parent){
+          parent.querySelector('.dropbtn').classList.add('active');
+        }
+      }
+    }
+
+    function setupDropdowns(){
+      const dropdowns = document.querySelectorAll('.dropdown');
+      dropdowns.forEach(dd => {
+        const btn = dd.querySelector('.dropbtn');
+        const menu = dd.querySelector('.dropdown-menu');
+        if(!btn || !menu) return;
+        // Klick togglet ARIA & Sichtbarkeit (für Touch/Keyboard)
+        btn.addEventListener('click', (e)=>{
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', String(!expanded));
+          dd.setAttribute('aria-expanded', String(!expanded));
+          menu.classList.toggle('open', !expanded);
+        });
+      });
+    }
+
+    loadInclude('site-header','/includes/header.html');
+    loadInclude('site-footer','/includes/footer.html');
+  </script>
+</body>
+</html>
