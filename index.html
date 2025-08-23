@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Burschenverein Hochbrück</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Burschenverein Hochbrück</h1>
+      <p class="lead">Gemeinschaft — Tradition — Veranstaltungen</p>
+      <p><a class="btn" href="mitglied-werden.html">Mitglied werden</a></p>
+    </section>
+
+    <section class="cards">
+      <article class="card">
+        <h3>Termine</h3>
+        <ul>
+          <li><strong>01. Mai 2025:</strong> Maibaumfest</li>
+          <li><strong>15. Juni 2025:</strong> Sommerfest</li>
+          <li><strong>20. Dezember 2025:</strong> Weihnachtsfeier</li>
+        </ul>
+        <p><a class="link" href="feste.html">Mehr Termine</a></p>
+      </article>
+
+      <article class="card">
+        <h3>Galerie</h3>
+        <p>Fotos vergangener Veranstaltungen.</p>
+        <p><a class="link" href="bilder.html">Zur Galerie</a></p>
+      </article>
+
+      <article class="card">
+        <h3>Steckerlfisch</h3>
+        <p>Informationen und Anmeldung (Formular).</p>
+        <p><a class="link" href="steckerlfisch.html">Zur Seite</a></p>
+      </article>
+    </section>
+
+    <section class="about">
+      <h2>Über uns</h2>
+      <p>Der Burschenverein Hochbrück engagiert sich für Tradition und gemeinschaftliches Miteinander im Ort. Wir organisieren Feste, unterstützen Projekte und treffen uns regelmäßig.</p>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  // Kleine Include‑Funktion für Header & Footer (setzt die Dateien aus /includes)
+  async function loadInclude(selector, path){
+    const el = document.querySelector(selector);
+    if(!el) return;
+    try{
+      const resp = await fetch(path);
+      if(!resp.ok) return;
+      el.innerHTML = await resp.text();
+    }catch(e){ console.warn(e); }
+  }
+  loadInclude('#site-header','/includes/header.html');
+  loadInclude('#site-footer','/includes/footer.html');
+
+  // aktive Navigation markieren
+  function setActive(){
+    const nav = document.querySelector('nav');
+    if(!nav) return;
+    const links = nav.querySelectorAll('a');
+    links.forEach(a=>{
+      if(location.pathname.endsWith(a.getAttribute('href')) || location.pathname === '/' && a.getAttribute('href') === 'index.html'){
+        a.classList.add('active');
+      }
+    });
+  }
+  window.addEventListener('load', setActive);
+  </script>
+</body>
+</html>
