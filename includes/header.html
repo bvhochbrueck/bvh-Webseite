@@ -1,13 +1,35 @@
+<!-- includes/header.html -->
+<!--
+  Gemeinsamer Header (Navigation).
+  - Dropdown "Über uns" enthält Chronik und Vorstände.
+  - Die aktiven Links werden per script in den Seiten markiert.
+  - Für Barrierefreiheit: aria-Attribute beim Dropdown.
+-->
+
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html">Burschenverein Hochbrück</a>
-    <nav>
-      <a href="index.html">Start</a>
-      <a href="bilder.html">Bilder</a>
-      <a href="feste.html">Feste</a>
-      <a href="steckerlfisch.html">Steckerlfisch</a>
-      <a href="mitglied-werden.html">Mitglied werden</a>
-      <a href="impressum.html">Impressum</a>
+    <a class="brand" href="index.html" aria-label="Burschenverein Hochbrück - Start">
+      <!-- Das kleine Inline-Logo (kann durch CSS ausgeblendet werden, z. B. auf Startseite) -->
+      <img class="brand-logo" src="/assets/images/logo.svg" alt="BV Hochbrück Logo" width="36" height="36">
+      <span class="brand-text">Burschenverein Hochbrück</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="index.html">Start</a></li>
+
+        <!-- Dropdown für "Über uns" -->
+        <li class="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="dropbtn" aria-controls="ueber-sub" aria-expanded="false">Über uns ▾</button>
+          <ul id="ueber-sub" class="dropdown-menu" role="menu" aria-label="Unterseiten Über uns">
+            <li role="none"><a role="menuitem" href="chronik.html">Chronik</a></li>
+            <li role="none"><a role="menuitem" href="vorstaende.html">Vorstände</a></li>
+          </ul>
+        </li>
+
+        <li><a href="steckerlfisch.html">Steckerlfisch</a></li>
+        <li><a href="unterstuetz-uns.html">Unterstütz' uns</a></li>
+      </ul>
     </nav>
   </div>
 </header>
