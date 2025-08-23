@@ -1,33 +1,58 @@
+<!-- steckerlfisch.html -->
 <!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Steckerlfisch — Burschenverein Hochbrück</title>
+  <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body>
-  <div id="site-header"></div>
-  <main class="container">
-    <h2>Steckerlfisch</h2>
-    <p>Hier kannst du dich für Steckerlfisch‑Schichten/Bestellungen anmelden.</p>
+<body class="page-other has-bg">
 
-    <!-- PASTE GOOGLE FORM EMBED HERE -->
+  <div id="site-header"></div>
+
+  <main class="container">
+    <h1>Steckerlfisch</h1>
+    <p>Hier kannst du dich für Schichten oder Bestellungen anmelden.</p>
+
     <!--
-      So bekommst du den Einbettungs‑Code in Google Forms: oben rechts "Mehr" → "Embed HTML" → Copy. Dann hier den <iframe ...> einfügen.
-      Beispiel:
-      <iframe src="https://docs.google.com/forms/d/e/DEINE_FORM_ID/viewform?embedded=true" width="640" height="800" frameborder="0" marginheight="0" marginwidth="0">Wird geladen…</iframe>
+      Google Forms einbetten:
+      1. Öffne dein Google Form → Mehr (⋮) → "Einbetten" (<>).
+      2. Kopiere den iframe-Code und ersetze das folgende Beispiel.
     -->
 
-    <p>Falls du das Formular nicht einbinden willst: verlinke einfach die Formular‑URL oder nutze eine E‑Mail: <a href="mailto:info@bvhochbrueck.de">info@bvhochbrueck.de</a></p>
+    <!-- Beispiel-iframe (ersetzt diesen Block mit deinem echten Embed-Code) -->
+    <!--
+    <iframe src="https://docs.google.com/forms/d/e/DEINE_FORM_ID/viewform?embedded=true"
+            width="640" height="900" frameborder="0" marginheight="0" marginwidth="0">Wird geladen…</iframe>
+    -->
+
+    <p>Alternativ: Link zum Formular: <a href="https://forms.gle/DEIN_LINK" target="_blank" rel="noopener">Formular öffnen</a></p>
   </main>
+
   <div id="site-footer"></div>
+
   <script>
-    loadInclude('#site-header','/includes/header.html');
-    loadInclude('#site-footer','/includes/footer.html');
-    window.addEventListener('load',()=>{
-      const nav = document.querySelector('nav'); if(nav){ const links = nav.querySelectorAll('a'); links.forEach(a=>{ if(location.pathname.endsWith(a.getAttribute('href'))){ a.classList.add('active'); } }); }
-    });
+    // include / dropdown wie auf anderen Seiten
+    async function loadInclude(id, path){
+      const el = document.getElementById(id);
+      if(!el) return;
+      try {
+        const r = await fetch(path);
+        if(!r.ok) return;
+        el.innerHTML = await r.text();
+        const yearSpan = document.getElementById('year');
+        if(yearSpan) yearSpan.textContent = new Date().getFullYear();
+        markActiveNav();
+        setupDropdowns();
+      } catch(e){ console.warn('Include laden fehlgeschlagen', e); }
+    }
+    function markActiveNav(){ /* siehe oben */ const nav = document.querySelector('.main-nav'); if(!nav) return; const links = nav.querySelectorAll('a'); const cur = location.pathname.split('/').pop() || 'index.html'; links.forEach(a=>{ if(a.getAttribute('href') === cur) a.classList.add('active'); }); }
+    function setupDropdowns(){ const dropdowns = document.querySelectorAll('.dropdown'); dropdowns.forEach(dd => { const btn = dd.querySelector('.dropbtn'); const menu = dd.querySelector('.dropdown-menu'); if(!btn || !menu) return; btn.addEventListener('click', ()=>{ const expanded = btn.getAttribute('aria-expanded') === 'true'; btn.setAttribute('aria-expanded', String(!expanded)); dd.setAttribute('aria-expanded', String(!expanded)); menu.classList.toggle('open', !expanded); }); }); }
+
+    loadInclude('site-header','/includes/header.html');
+    loadInclude('site-footer','/includes/footer.html');
   </script>
 </body>
 </html>
