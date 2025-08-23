@@ -1,70 +1,88 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Burschenverein Hochbrück</title>
+  <title>Burschenverein Hochbrück — Start</title>
+
+  <!-- Favicon (SVG-Datei) -->
+  <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
+
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body>
+<body class="page-index">
+
+  <!-- Header Include -->
   <div id="site-header"></div>
 
   <main class="container">
-    <section class="hero">
-      <h1>Burschenverein Hochbrück</h1>
-      <p class="lead">Gemeinschaft — Tradition — Veranstaltungen</p>
+    <!-- HERO mit großem mittigem Logo -->
+    <section class="hero hero-centered">
+      <div class="logo-wrap" aria-hidden="true">
+        <!-- Logo-Platzhalter (zentriert). Ersetze assets/images/logo.svg später durch das echte Logo -->
+        <img src="/assets/images/logo.svg" alt="" class="hero-logo">
+      </div>
+
+      <h1 class="hero-title">Burschenverein Hochbrück</h1>
+      <p class="hero-sub">Gemeinschaft — Tradition — Veranstaltungen</p>
     </section>
 
-    <section class="cards">
+    <!-- Zwei abgegrenzte Felder -->
+    <section class="two-cards">
       <article class="card">
-        <h3>Termine</h3>
+        <h2>Über den Verein</h2>
+        <p>Der Burschenverein Hochbrück pflegt Tradition und Gemeinschaft. Wir organisieren Feste, Veranstaltungen und unterstützen Projekte im Ort.</p>
+        <p><a class="link" href="chronik.html">Mehr zur Chronik</a></p>
+      </article>
+
+      <article class="card">
+        <h2>Termine</h2>
         <ul>
-          <li><strong>18. Oktober 2025:</strong> Weinfest</li>
-          <li><strong>23. Dezember 2025:</strong> Weihnachtsfeier</li>
+          <li><strong>18. Oktober 2025</strong> — Weinfest</li>
+          <li><strong>23. Dez 2025</strong> — Weihnachtsfeier</li>
         </ul>
+        <p><a class="link" href="feste.html">Alle Termine</a></p>
       </article>
-
-      <article class="card">
-        <h3>Steckerlfisch</h3>
-        <p>Informationen und Anmeldung (Formular).</p>
-        <p><a class="link" href="steckerlfisch.html">Zur Seite</a></p>
-      </article>
-    </section>
-
-    <section class="about">
-      <h2>Über uns</h2>
-      <p>Der Burschenverein Hochbrück engagiert sich für Tradition und gemeinschaftliches Miteinander im Ort. Wir organisieren Feste, unterstützen Projekte, treffen uns regelmäßig und wollen den Zusammenhalt im Ort stärken.</p>
     </section>
   </main>
 
+  <!-- Footer Include -->
   <div id="site-footer"></div>
 
   <script>
-  // Kleine Include‑Funktion für Header & Footer (setzt die Dateien aus /includes)
-  async function loadInclude(selector, path){
-    const el = document.querySelector(selector);
-    if(!el) return;
-    try{
-      const resp = await fetch(path);
-      if(!resp.ok) return;
-      el.innerHTML = await resp.text();
-    }catch(e){ console.warn(e); }
-  }
-  loadInclude('#site-header','/includes/header.html');
-  loadInclude('#site-footer','/includes/footer.html');
+    // Laden von Header & Footer (gleiche Technik wie bisher).
+    async function loadInclude(id, path){
+      const el = document.getElementById(id);
+      if(!el) return;
+      try {
+        const r = await fetch(path);
+        if(!r.ok) return;
+        el.innerHTML = await r.text();
 
-  // aktive Navigation markieren
-  function setActive(){
-    const nav = document.querySelector('nav');
-    if(!nav) return;
-    const links = nav.querySelectorAll('a');
-    links.forEach(a=>{
-      if(location.pathname.endsWith(a.getAttribute('href')) || location.pathname === '/' && a.getAttribute('href') === 'index.html'){
-        a.classList.add('active');
-      }
-    });
-  }
-  window.addEventListener('load', setActive);
+        // Footer Jahr setzen
+        const yearSpan = document.getElementById('year');
+        if(yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+        // Navigation aktiv setzen
+        markActiveNav();
+      } catch(e){ console.warn('Include laden fehlgeschlagen', e); }
+    }
+
+    function markActiveNav(){
+      const nav = document.querySelector('.main-nav');
+      if(!nav) return;
+      const links = nav.querySelectorAll('a');
+      const cur = location.pathname.split('/').pop() || 'index.html';
+      links.forEach(a=>{
+        const href = a.getAttribute('href');
+        if(href === cur || (href === 'index.html' && cur === '')) a.classList.add('active');
+      });
+    }
+
+    // Einbinden
+    loadInclude('site-header','/includes/header.html');
+    loadInclude('site-footer','/includes/footer.html');
   </script>
 </body>
 </html>
