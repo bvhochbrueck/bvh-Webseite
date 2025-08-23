@@ -1,0 +1,46 @@
+<!-- unterstuetz-uns.html -->
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Unterstütz' uns — Burschenverein Hochbrück</title>
+  <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body class="page-other has-bg">
+
+  <div id="site-header"></div>
+
+  <main class="container">
+    <h1>Unterstütz' uns</h1>
+    <p>Informationen zum Spenden, Sponsor werden oder praktische Hilfe.</p>
+    <ul>
+      <li>Spenden-Link (z. B. PayPal / Spendenkonto)</li>
+      <li>Kontakt für Sponsoring</li>
+    </ul>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+    // includes + dropdown-setup wie zuvor
+    async function loadInclude(id, path){
+      const el = document.getElementById(id);
+      if(!el) return;
+      try {
+        const r = await fetch(path);
+        if(!r.ok) return;
+        el.innerHTML = await r.text();
+        const yearSpan = document.getElementById('year');
+        if(yearSpan) yearSpan.textContent = new Date().getFullYear();
+        markActiveNav(); setupDropdowns();
+      } catch(e){ console.warn('Include laden fehlgeschlagen', e); }
+    }
+    function markActiveNav(){ const nav = document.querySelector('.main-nav'); if(!nav) return; const links = nav.querySelectorAll('a'); const cur = location.pathname.split('/').pop() || 'index.html'; links.forEach(a=>{ if(a.getAttribute('href') === cur) a.classList.add('active'); }); }
+    function setupDropdowns(){ const dropdowns = document.querySelectorAll('.dropdown'); dropdowns.forEach(dd => { const btn = dd.querySelector('.dropbtn'); const menu = dd.querySelector('.dropdown-menu'); if(!btn || !menu) return; btn.addEventListener('click', ()=>{ const expanded = btn.getAttribute('aria-expanded') === 'true'; btn.setAttribute('aria-expanded', String(!expanded)); dd.setAttribute('aria-expanded', String(!expanded)); menu.classList.toggle('open', !expanded); }); }); }
+    loadInclude('site-header','/includes/header.html');
+    loadInclude('site-footer','/includes/footer.html');
+  </script>
+</body>
+</html>
