@@ -1,113 +1,132 @@
 /* assets/css/style.css
-   NAV + Dropdown (aktualisiert: kein Hamburger, responsive, Dropdown per hover+click)
+   Aktualisiert: Dropdown-Hintergrundfarbe, Dropdown-Z-Index/Pointer, stacked cards auf Start.
 */
 
-/* --- Basis / Variablen --- */
+/* ---- Grundlegendes ---- */
 :root{
-  --accent: #0b6b58;
-  --accent-dark: #066a57;
-  --dropdown-bg: #cfeade;    /* helles Grün für Dropdown (lesbar) */
-  --dropdown-hover: rgba(255,255,255,0.06);
-  --text-light: #fff;
-  --text-dark: #12221a;
-  --muted: #6b6b6b;
-  --bg: #fbfff9;
+  --max-width:1100px;
+  --accent:#0b6b58;        /* ursprüngliches Akzentgrün */
+  --accent-light:#2a8a6e;  /* leicht helleres Grün für Dropdown-Hintergrund */
+  --muted:#666;
+  --bg:#ffffff;
+  --card-bg:#fafafa;
 }
 
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:var(--bg);color:var(--text-dark);line-height:1.45}
+body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background:var(--bg);line-height:1.45}
+.container{max-width:var(--max-width);margin:1.6rem auto;padding:0 1rem}
+.wrap{max-width:var(--max-width);margin:0 auto;padding:0 1rem}
 
-/* Header / Brand */
-.site-header{background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:var(--text-light);padding:0.6rem 0;position:relative;z-index:50}
-.site-header .wrap{max-width:1100px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.brand{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--text-light)}
-.brand-logo{width:40px;height:40px;display:block}
+/* ---- Header / Navigation ---- */
+.site-header{background:linear-gradient(90deg,var(--accent),#066a57);color:#fff;position:relative;z-index:20}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;padding:0.7rem 0}
+.brand{display:flex;align-items:center;gap:.6rem;color:#fff;text-decoration:none}
+.brand-logo{width:36px;height:36px}
 .brand-text{font-weight:700}
 
-/* MAIN NAV - immer sichtbar (kein Hamburger) */
-/* GEÄNDERT: display:flex + flex-wrap erlaubt responsive Umbruch statt hidden-menu */
-.main-nav ul{
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:flex;
-  gap:0.25rem;
-  align-items:center;
-  justify-content:center;
-  flex-wrap:wrap; /* WICHTIG: bei sehr kleinen Bildschirmen Zeilenumbruch statt Hamburger */
-}
-
-/* Nav-Links */
+/* Hauptnavigation */
+.main-nav ul{list-style:none;margin:0;padding:0;display:flex;gap:0.4rem;align-items:center}
 .main-nav a, .dropbtn{
-  color:var(--text-light);
+  color:#fff;
   text-decoration:none;
-  padding:.55rem .75rem;
-  border-radius:8px;
+  padding:.45rem .6rem;
+  border-radius:6px;
+  display:inline-block;
   background:transparent;
-  font-weight:600;
+  border:0;
+  cursor:pointer;
+  font-size:0.95rem;
 }
 
-/* Hover / focus */
-.main-nav a:hover, .dropbtn:hover, .main-nav a:focus, .dropbtn:focus{
-  background:var(--dropdown-hover);
-  outline:none;
-}
+/* aktive Links */
+.main-nav a.active, .dropbtn.active{background:rgba(255,255,255,0.08);text-decoration:underline}
 
-/* Aktiver Link */
-.main-nav a.active, .dropbtn.active{
-  background:rgba(255,255,255,0.10);
-  text-decoration:underline;
-}
-
-/* -------------------------
-   Dropdown
-   ------------------------- */
-.dropdown{position:relative} /* notwendig, damit absolute Position relativ ist */
-
+/* ---- Dropdown: Hintergrundfarbe & Interaktionsfixes ---- */
+/* WICHTIG: Hintergrundfarbe auf leicht helleres Grün (nicht weiß) damit weiße Schrift gut lesbar ist.
+   Außerdem z-index hoch, pointer-events sicher, und die Links sind über die ganze Breite klickbar. */
+.dropdown{position:relative; z-index:1000}
 .dropdown .dropdown-menu{
-  display:none; /* sichtbar bei :hover, .open oder focus-within */
   position:absolute;
   top:calc(100% + 6px);
   left:0;
-  min-width:190px;               /* GEÄNDERT: genug Platz für beide Items */
-  background:var(--dropdown-bg); /* GEÄNDERT: helles Grün statt Weiß */
-  border-radius:10px;
-  padding:0.25rem 0;
-  box-shadow:0 10px 24px rgba(3,20,10,0.12);
-  z-index:2000;                  /* GEÄNDERT: über anderen Elementen */
+  min-width:200px;
+  background:var(--accent-light);   /* leicht helleres Grün */
+  color:#fff;                       /* weiße Linktexte für guten Kontrast */
+  border-radius:8px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.13);
+  display:none;
+  padding:.35rem 0;
   pointer-events:auto;
 }
 
-/* Menu items are full width and touch friendly */
+/* sichtbar/geschlossen */
+.dropdown .dropdown-menu.open{display:block}
+
+/* Menülinks: weiß, vollflächig anklickbar */
 .dropdown .dropdown-menu a{
   display:block;
-  color:var(--text-light);
-  padding:.6rem 1rem;
+  padding:.55rem 1rem;
+  color:#fff;
   text-decoration:none;
-  font-weight:600;
+  font-size:0.95rem;
 }
 
-/* Hover/focus for dropdown items */
-.dropdown .dropdown-menu a:hover, .dropdown .dropdown-menu a:focus{
-  background:var(--dropdown-hover);
+/* Hover / Focus Zustand für Menüitems: lighten overlay */
+.dropdown .dropdown-menu a:hover,
+.dropdown .dropdown-menu a:focus{
+  background:rgba(255,255,255,0.06);
   outline:none;
 }
 
-/* Show menu:
-   - on hover (desktop)
-   - when parent has .open (toggled by JS on touch)
-   - when focus-within (keyboard)
+/* Auf Desktop: zusätzlich Hover zeigt das Menü (beibehaltend der Click-Logik) */
+@media(min-width:900px){
+  .dropdown:hover .dropdown-menu{display:block}
+}
+
+/* ---- Hero (Startseite) ---- */
+.hero-centered{padding:2.8rem 1rem;text-align:center}
+.logo-wrap{display:flex;justify-content:center;margin-bottom:0.6rem}
+.hero-logo{width:160px;height:auto;border-radius:12px}
+.hero-title{margin:.3rem 0 .1rem;font-size:2rem;color:var(--accent)}
+.hero-sub{color:var(--muted);margin-top:0}
+
+/* ---- Zwei Karten auf Startseite: jetzt FULL WIDTH stacked (untereinander) ----
+   Änderung gegenüber vorher: statt Grid -> stacked full width untereinander,
+   damit jedes Feld die ganze (Container-)Breite einnimmt.
 */
-.dropdown:hover > .dropdown-menu,
-.dropdown.open > .dropdown-menu,
-.dropdown:focus-within > .dropdown-menu {
-  display:block;
+.two-cards{display:block;margin-top:1.2rem}
+.two-cards .card{width:100%;margin-bottom:1rem;background:var(--card-bg);border:1px solid #eee;padding:1.1rem;border-radius:10px}
+
+/* ---- Buttons / Links ---- */
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:.45rem .8rem;border-radius:8px;text-decoration:none}
+.link{color:var(--accent)}
+
+/* ---- Footer ---- */
+.site-footer{background:#f4f4f4;padding:1rem 0;margin-top:2rem;text-align:center;color:var(--muted)}
+
+/* ---- Hintergrund-Logo für 'other' Seiten ---- */
+body.has-bg::before{
+  content:"";
+  position:fixed;
+  left:50%;
+  top:80px;
+  transform:translateX(-50%);
+  width:420px;
+  height:420px;
+  background-image:url('/assets/images/logo.svg');
+  background-repeat:no-repeat;
+  background-size:contain;
+  opacity:0.06;
+  pointer-events:none;
+  z-index:0;
 }
 
-/* If viewport small, dropdown becomes static (stacked) so items are reachable */
-@media (max-width:420px){
-  .dropdown .dropdown-menu{ position: static; box-shadow:none; margin-top:6px; }
-}
+/* Inhalte sollen über dem Hintergrund liegen */
+.container, .site-header, .site-footer{position:relative;z-index:10}
 
-/* --- Footer / rest --- */
-/* (deine bisherigen Styles für hero, cards, footer etc. bleiben unverändert) */
+/* ---- Mobile ---- */
+@media(max-width:700px){
+  .main-nav ul{flex-direction:column;background:transparent;gap:0.15rem}
+  .site-header .wrap{flex-direction:column;align-items:stretch}
+  .dropdown .dropdown-menu{position:static;box-shadow:none;padding:0.2rem 0;border-radius:6px}
+}
