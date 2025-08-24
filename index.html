@@ -12,6 +12,8 @@
   <link rel="icon" href="/assets/images/logo.png" type="image/png">
 
   <link rel="stylesheet" href="/assets/css/style.css">
+  <!-- NEU für Dropdown: -->
+  <script src="/assets/js/nav.js"></script>
 </head>
 <body class="page-index">
 
@@ -125,6 +127,7 @@
       await loadInclude('site-footer','/includes/footer.html');
       markActiveNav();
       setupDropdowns();
+      initNav(); // markiert aktive Links + initialisiert Dropdown-Klicks
     })();
   </script>
 </body>
