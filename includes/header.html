@@ -1,15 +1,12 @@
 <!-- includes/header.html -->
-<!--
-  Gemeinsamer Header (Navigation).
-  - Dropdown "Über uns" enthält Chronik und Vorstände.
-  - Die aktiven Links werden per script in den Seiten markiert.
-  - Für Barrierefreiheit: aria-Attribute beim Dropdown.
+<!-- Gemeinsamer Header / Navigation
+     - Dropdown "Über uns" mit zwei Links (Chronik, Vorstände).
+     - Die eigentliche Dropdown-Logik (click/toggle) wird in jeder Seite per JS initialisiert
+       (so funktioniert es zuverlässig, weil includes per fetch() eingefügt werden).
 -->
-
-<header class="site-header">
+<header class="site-header" role="banner">
   <div class="wrap">
     <a class="brand" href="index.html" aria-label="Burschenverein Hochbrück - Start">
-      <!-- Das kleine Inline-Logo (kann durch CSS ausgeblendet werden, z. B. auf Startseite) -->
       <img class="brand-logo" src="/assets/images/logo.svg" alt="BV Hochbrück Logo" width="36" height="36">
       <span class="brand-text">Burschenverein Hochbrück</span>
     </a>
@@ -18,9 +15,10 @@
       <ul>
         <li><a href="index.html">Start</a></li>
 
-        <!-- Dropdown für "Über uns" -->
+        <!-- Dropdown: Button + Liste.
+             Wichtig: button steuert das Menü (aria-expanded), Links sind normale <a>-Elemente -->
         <li class="dropdown" aria-haspopup="true" aria-expanded="false">
-          <button class="dropbtn" aria-controls="ueber-sub" aria-expanded="false">Über uns ▾</button>
+          <button class="dropbtn" aria-controls="ueber-sub" aria-expanded="false" type="button">Über uns ▾</button>
           <ul id="ueber-sub" class="dropdown-menu" role="menu" aria-label="Unterseiten Über uns">
             <li role="none"><a role="menuitem" href="chronik.html">Chronik</a></li>
             <li role="none"><a role="menuitem" href="vorstaende.html">Vorstände</a></li>
