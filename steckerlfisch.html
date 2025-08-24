@@ -5,41 +5,53 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Steckerlfisch — Burschenverein Hochbrück</title>
+
+  <!-- Favicon -->
   <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
   <link rel="icon" href="/assets/images/logo.png" type="image/png">
+
+  <!-- Zentrale CSS (enthält jetzt auch die Form-Styles) -->
   <link rel="stylesheet" href="/assets/css/style.css">
-  <!-- NEU für Dropdown: -->
+
+  <!-- Nav JS (enthält initNav()) -->
   <script src="/assets/js/nav.js"></script>
 </head>
 <body class="page-other has-bg">
 
+  <!-- Header wird per include eingefügt -->
   <div id="site-header"></div>
 
   <main class="container">
     <h1>Steckerlfisch</h1>
     <p>Hier kannst du deine Steckerlfisch-Bestellungen für Karfreitag abgeben.</p>
 
-    <!--
-      Google Forms einbetten:
-      1. Öffne dein Google Form → Mehr (⋮) → "Einbetten" (<>).
-      2. Kopiere den iframe-Code und ersetze das folgende Beispiel.
-    -->
+    <!-- RESPONSIVES FORM-WRAPPER: Breite passt sich jetzt automatisch an -->
+    <div class="form-wrapper">
+      <iframe
+        src="https://docs.google.com/forms/d/e/1FAIpQLSfFWT3I9d1nO7yCsFaNxMHtl0fxX4CEor6ZVd2F7fblLYXyJg/viewform?embedded=true"
+        title="Steckerlfisch-Bestellung"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+        loading="lazy">
+        Wird geladen…
+      </iframe>
+    </div>
 
-    <!-- Beispiel-iframe (ersetzt diesen Block mit deinem echten Embed-Code) -->
-    <!--
-    <iframe src="https://docs.google.com/forms/d/e/DEINE_FORM_ID/viewform?embedded=true"
-            width="640" height="900" frameborder="0" marginheight="0" marginwidth="0">Wird geladen…</iframe>
-    -->
-    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfFWT3I9d1nO7yCsFaNxMHtl0fxX4CEor6ZVd2F7fblLYXyJg/viewform?embedded=true" 
-      width="640" height="2009" frameborder="0" marginheight="0" marginwidth="0">Wird geladen…</iframe>
-
-    <p>Alternativ: Falls Formular nicht sichtbar, bitte über folgenden Link in neuem Tab öffnen: <a href="https://forms.gle/Yy2mfJ7rFSqrCb9A8" target="_blank" rel="noopener">Formular öffnen</a></p>
+    <p class="form-alt">
+      Formular nicht sichtbar? 
+      <a href="https://forms.gle/Yy2mfJ7rFSqrCb9A8" target="_blank" rel="noopener">Formular im neuen Tab öffnen</a>
+    </p>
   </main>
 
   <div id="site-footer"></div>
 
   <script>
-    // include / dropdown wie auf anderen Seiten
+    /* 
+      WICHTIG: Wir müssen warten, bis Header & Footer per fetch() geladen sind,
+      bevor wir initNav() (in /assets/js/nav.js) aufrufen.
+      Deshalb: await loadInclude(...).
+    */
     async function loadInclude(id, path){
       const el = document.getElementById(id);
       if(!el) return;
@@ -49,16 +61,21 @@
         el.innerHTML = await r.text();
         const yearSpan = document.getElementById('year');
         if(yearSpan) yearSpan.textContent = new Date().getFullYear();
-        markActiveNav();
-        setupDropdowns();
       } catch(e){ console.warn('Include laden fehlgeschlagen', e); }
     }
-    function markActiveNav(){ /* siehe oben */ const nav = document.querySelector('.main-nav'); if(!nav) return; const links = nav.querySelectorAll('a'); const cur = location.pathname.split('/').pop() || 'index.html'; links.forEach(a=>{ if(a.getAttribute('href') === cur) a.classList.add('active'); }); }
-    function setupDropdowns(){ const dropdowns = document.querySelectorAll('.dropdown'); dropdowns.forEach(dd => { const btn = dd.querySelector('.dropbtn'); const menu = dd.querySelector('.dropdown-menu'); if(!btn || !menu) return; btn.addEventListener('click', ()=>{ const expanded = btn.getAttribute('aria-expanded') === 'true'; btn.setAttribute('aria-expanded', String(!expanded)); dd.setAttribute('aria-expanded', String(!expanded)); menu.classList.toggle('open', !expanded); }); }); }
 
-    loadInclude('site-header','/includes/header.html');
-    loadInclude('site-footer','/includes/footer.html');
-    initNav(); // markiert aktive Links + initialisiert Dropdown-Klicks
+    (async function initPage(){
+      // Lade Header + Footer (wartet, bis fertig)
+      await loadInclude('site-header','/includes/header.html');
+      await loadInclude('site-footer','/includes/footer.html');
+
+      // Jetzt initNav() aus nav.js aufrufen — markiert aktive Links und setzt Dropdown-Click.
+      if(typeof initNav === 'function'){
+        initNav();
+      } else {
+        console.warn('initNav() nicht gefunden. Prüfe /assets/js/nav.js');
+      }
+    })();
   </script>
 </body>
 </html>
