@@ -8,6 +8,8 @@
   <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
   <link rel="icon" href="/assets/images/logo.png" type="image/png">
   <link rel="stylesheet" href="/assets/css/style.css">
+  <!-- NEU für Dropdown: -->
+  <script src="/assets/js/nav.js"></script>
 </head>
 <body class="page-other has-bg">
 
@@ -42,6 +44,7 @@
     function setupDropdowns(){ const dropdowns = document.querySelectorAll('.dropdown'); dropdowns.forEach(dd => { const btn = dd.querySelector('.dropbtn'); const menu = dd.querySelector('.dropdown-menu'); if(!btn || !menu) return; btn.addEventListener('click', ()=>{ const expanded = btn.getAttribute('aria-expanded') === 'true'; btn.setAttribute('aria-expanded', String(!expanded)); dd.setAttribute('aria-expanded', String(!expanded)); menu.classList.toggle('open', !expanded); }); }); }
     loadInclude('site-header','/includes/header.html');
     loadInclude('site-footer','/includes/footer.html');
+    initNav(); // markiert aktive Links + initialisiert Dropdown-Klicks
   </script>
 </body>
 </html>
