@@ -5,73 +5,50 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Chronik — Burschenverein Hochbrück</title>
+
+  <!-- Favicon automatisch aus assets/images -->
   <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/images/logo.png" type="image/png">
+
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body class="page-other has-bg"> <!-- class has-bg sorgt für Hintergrund-Logo -->
+<body class="page-other has-bg">
 
   <div id="site-header"></div>
 
   <main class="container">
     <h1>Chronik</h1>
-    <p>Hier könnt ihr die Chronik eures Vereins darstellen: Jahreszahlen, wichtige Ereignisse, Fotos und Anekdoten.</p>
-    <!-- Mehr Inhalte hier -->
+    <p>Hier die Vereinschronik ...</p>
   </main>
 
   <div id="site-footer"></div>
 
   <script>
-    // gleiche include-Funktion wie auf Index
+    // gleiche helper-Funktionen wie index.html (loadInclude, markActiveNav, setupDropdowns)
     async function loadInclude(id, path){
       const el = document.getElementById(id);
       if(!el) return;
-      try {
-        const r = await fetch(path);
-        if(!r.ok) return;
-        el.innerHTML = await r.text();
-        const yearSpan = document.getElementById('year');
-        if(yearSpan) yearSpan.textContent = new Date().getFullYear();
-        markActiveNav();
-        // Dropdown mobile: offen/geschlossen synchronisieren
-        setupDropdowns();
-      } catch(e){ console.warn('Include laden fehlgeschlagen', e); }
+      try { const r = await fetch(path); if(!r.ok) return; el.innerHTML = await r.text();
+        const yearSpan = document.getElementById('year'); if(yearSpan) yearSpan.textContent = new Date().getFullYear();
+      } catch(e){ console.warn(e); }
     }
     function markActiveNav(){
-      const nav = document.querySelector('.main-nav');
-      if(!nav) return;
-      const links = nav.querySelectorAll('a');
-      const cur = location.pathname.split('/').pop() || 'index.html';
-      links.forEach(a=>{
-        if(a.getAttribute('href') === cur) a.classList.add('active');
-      });
-      // Falls Seite in submenu steht: markiere Dropdown-Taste aktiv
-      const active = document.querySelector('.main-nav a.active');
-      if(active){
-        const parent = active.closest('.dropdown');
-        if(parent){
-          parent.querySelector('.dropbtn').classList.add('active');
-        }
-      }
+      const nav = document.querySelector('.main-nav'); if(!nav) return;
+      const links = nav.querySelectorAll('a'); const cur = location.pathname.split('/').pop() || 'index.html';
+      links.forEach(a=>{ if(a.getAttribute('href') === cur) a.classList.add('active'); });
+      const active = nav.querySelector('a.active'); if(active){ const parent = active.closest('.dropdown'); if(parent){ const btn = parent.querySelector('.dropbtn'); if(btn) btn.classList.add('active'); } }
     }
-
     function setupDropdowns(){
       const dropdowns = document.querySelectorAll('.dropdown');
       dropdowns.forEach(dd => {
-        const btn = dd.querySelector('.dropbtn');
-        const menu = dd.querySelector('.dropdown-menu');
+        const btn = dd.querySelector('.dropbtn'); const menu = dd.querySelector('.dropdown-menu');
         if(!btn || !menu) return;
-        // Klick togglet ARIA & Sichtbarkeit (für Touch/Keyboard)
-        btn.addEventListener('click', (e)=>{
-          const expanded = btn.getAttribute('aria-expanded') === 'true';
-          btn.setAttribute('aria-expanded', String(!expanded));
-          dd.setAttribute('aria-expanded', String(!expanded));
-          menu.classList.toggle('open', !expanded);
-        });
+        document.addEventListener('click', (ev) => { if(!dd.contains(ev.target)){ btn.setAttribute('aria-expanded','false'); dd.setAttribute('aria-expanded','false'); menu.classList.remove('open'); } });
+        btn.addEventListener('click', (e)=>{ e.stopPropagation(); const expanded = btn.getAttribute('aria-expanded') === 'true'; btn.setAttribute('aria-expanded', String(!expanded)); dd.setAttribute('aria-expanded', String(!expanded)); menu.classList.toggle('open', !expanded); });
       });
     }
 
-    loadInclude('site-header','/includes/header.html');
-    loadInclude('site-footer','/includes/footer.html');
+    (async function init(){ await loadInclude('site-header','/includes/header.html'); await loadInclude('site-footer','/includes/footer.html'); markActiveNav(); setupDropdowns(); })();
   </script>
 </body>
 </html>
