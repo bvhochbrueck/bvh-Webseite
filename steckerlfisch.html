@@ -8,6 +8,8 @@
   <link rel="icon" href="/assets/images/logo.svg" type="image/svg+xml">
   <link rel="icon" href="/assets/images/logo.png" type="image/png">
   <link rel="stylesheet" href="/assets/css/style.css">
+  <!-- NEU für Dropdown: -->
+  <script src="/assets/js/nav.js"></script>
 </head>
 <body class="page-other has-bg">
 
@@ -54,6 +56,7 @@
 
     loadInclude('site-header','/includes/header.html');
     loadInclude('site-footer','/includes/footer.html');
+    initNav(); // markiert aktive Links + initialisiert Dropdown-Klicks
   </script>
 </body>
 </html>
