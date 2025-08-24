@@ -121,7 +121,13 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background
 /* ---- Hero (Startseite) ---- */
 .hero-centered{padding:2.8rem 1rem;text-align:center}
 .logo-wrap{display:flex;justify-content:center;margin-bottom:0.6rem}
-.hero-logo{width:160px;height:auto;border-radius:12px}
+/* ---- für Breites Logo auf Startseite neu, Backup:  .hero-logo{width:160px;height:auto;border-radius:12px} ---- */
+.hero-logo {
+  width: 100%;       /* nimmt die komplette Breite des Containers */
+  height: auto;      /* Höhe proportional, damit das Logo nicht verzerrt */
+  max-width: 100%;   /* verhindert, dass es über den Rand hinausgeht */
+  display: block;    /* entfernt kleine "Lücken" durch inline-Images */
+}
 .hero-title{margin:.3rem 0 .1rem;font-size:2rem;color:var(--accent)}
 .hero-sub{color:var(--muted);margin-top:0}
 
