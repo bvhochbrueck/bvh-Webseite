@@ -1,15 +1,22 @@
 /* assets/css/style.css
-   Aktualisiert: Dropdown-Hintergrundfarbe, Dropdown-Z-Index/Pointer, stacked cards auf Start.
+   Basis + Navigation + Dropdown (korrigiert) + Form-Wrapper (responsive)
+   Hinweise:
+   - Nur Dropdown-Block und Form-Wrapper sind neu/angepasst.
+   - Andere Styles unverändert.
 */
 
 /* ---- Grundlegendes ---- */
 :root{
   --max-width:1100px;
-  --accent:#0b6b58;        /* ursprüngliches Akzentgrün */
-  --accent-light:#2a8a6e;  /* leicht helleres Grün für Dropdown-Hintergrund */
+  --accent:#0b6b58;
+  --accent-light:#2a8a6e;
   --muted:#666;
   --bg:#ffffff;
   --card-bg:#fafafa;
+
+  /* NEU: Akzent für Dropdown (dunkler für bessere Lesbarkeit) */
+  --dropdown-bg: #066a57;
+  --dropdown-hover-overlay: rgba(255,255,255,0.06);
 }
 
 *{box-sizing:border-box}
@@ -41,24 +48,30 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background
 /* aktive Links */
 .main-nav a.active, .dropbtn.active{background:rgba(255,255,255,0.08);text-decoration:underline}
 
-/* ---- Dropdown: Korrigiert für Desktop & Mobile ---- */
+
+/* ===============================
+   DROPDOWN (bereinigt & robust)
+   - ersetzt die mehrfachen/konfligierenden Regeln
+   - funktioniert per :hover (Desktop) und per .open (Touch/JS)
+   =============================== */
+
 .dropdown {
-  position: relative;
-  z-index: 1000;
+  position: relative;  /* Referenz für das absolut positionierte Menü */
+  z-index: 1000;       /* steht über anderen Elementen */
 }
 
-/* Dropdown-Menü sichtbar bei hover oder .open (JS) */
+/* Grundregel: Menü versteckt. Sichtbar per :hover (Desktop), .open (JS) oder :focus-within (Keyboard) */
 .dropdown .dropdown-menu {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
   min-width: 200px;
-  width: max-content;           /* passt sich an längsten Eintrag an */
-  background: #066a57;          /* dunkleres Grün für bessere Lesbarkeit */
-  color: #fff;                  /* weiße Links */
+  width: max-content;               /* passt sich an längsten Eintrag an */
+  background: var(--dropdown-bg);   /* dunkleres, gut lesbares Grün */
+  color: #fff;
   border-radius: 8px;
   box-shadow: 0 8px 22px rgba(0,0,0,0.13);
-  display: none;
+  display: none;                    /* sichtbar durch eine der Bedingungen weiter unten */
   padding: 0.35rem 0;
   pointer-events: auto;
 }
@@ -72,10 +85,10 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background
   font-size: 0.95rem;
 }
 
-/* Hover / Focus für Menüitems */
+/* Hover / Focus Zustand für Menüitems */
 .dropdown .dropdown-menu a:hover,
 .dropdown .dropdown-menu a:focus {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--dropdown-hover-overlay);
   outline: none;
 }
 
@@ -84,10 +97,11 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background
   .dropdown:hover .dropdown-menu { display: block; }
 }
 
-/* Mobile / Touch: Menü sichtbar, wenn .open gesetzt (JS) */
+/* Wenn JS .open an das .dropdown setzt (Touch/Click), ist das Menü sichtbar */
+.dropdown.open > .dropdown-menu,
 .dropdown .dropdown-menu.open { display: block; }
 
-/* Mobile: position static */
+/* Mobile: Menü wird statisch (fällt in den Fluss), damit es gut auf kleinen Bildschirmen funktioniert */
 @media (max-width: 700px) {
   .dropdown .dropdown-menu {
     position: static;
@@ -97,30 +111,10 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background
   }
 }
 
+/* ===============================
+   ENDE Dropdown
+   =============================== */
 
-/* sichtbar/geschlossen */
-.dropdown .dropdown-menu.open{display:block}
-
-/* Menülinks: weiß, vollflächig anklickbar */
-.dropdown .dropdown-menu a{
-  display:block;
-  padding:.55rem 1rem;
-  color:#fff;
-  text-decoration:none;
-  font-size:0.95rem;
-}
-
-/* Hover / Focus Zustand für Menüitems: lighten overlay */
-.dropdown .dropdown-menu a:hover,
-.dropdown .dropdown-menu a:focus{
-  background:rgba(255,255,255,0.06);
-  outline:none;
-}
-
-/* Auf Desktop: zusätzlich Hover zeigt das Menü (beibehaltend der Click-Logik) */
-@media(min-width:900px){
-  .dropdown:hover .dropdown-menu{display:block}
-}
 
 /* ---- Hero (Startseite) ---- */
 .hero-centered{padding:2.8rem 1rem;text-align:center}
@@ -129,10 +123,33 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background
 .hero-title{margin:.3rem 0 .1rem;font-size:2rem;color:var(--accent)}
 .hero-sub{color:var(--muted);margin-top:0}
 
-/* ---- Zwei Karten auf Startseite: jetzt FULL WIDTH stacked (untereinander) ----
-   Änderung gegenüber vorher: statt Grid -> stacked full width untereinander,
-   damit jedes Feld die ganze (Container-)Breite einnimmt.
+/* ---- Form-Wrapper (NEU: zentrale Styles für Google-Form) ----
+   - Breite: 100% des Containers (passt sich an Gerät an)
+   - max-width: verhindert zu breite Darstellung auf sehr großen Bildschirmen
+   - min-height: lediglich ein Startwert; Höhe kann gescrollt werden
 */
+.form-wrapper {
+  width: 100%;
+  max-width: 1000px;   /* anpassen falls gewünscht */
+  margin: 0.6rem auto;
+}
+
+.form-wrapper iframe {
+  width: 100%;         /* WICHTIG: sorgt dafür, dass die Breite immer passt */
+  min-height: 900px;   /* Höhe egal für dich — iframe scrollt intern */
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* kleineres Gerät: evtl. mehr Höhe, wenn Formular mobil länger ist (optional) */
+@media (max-width: 600px) {
+  .form-wrapper iframe {
+    min-height: 1200px;
+  }
+}
+
+/* ---- Zwei Karten auf Startseite: jetzt FULL WIDTH stacked (untereinander) ---- */
 .two-cards{display:block;margin-top:1.2rem}
 .two-cards .card{width:100%;margin-bottom:1rem;background:var(--card-bg);border:1px solid #eee;padding:1.1rem;border-radius:10px}
 
@@ -163,9 +180,9 @@ body.has-bg::before{
 /* Inhalte sollen über dem Hintergrund liegen */
 .container, .site-header, .site-footer{position:relative;z-index:10}
 
-/* ---- Mobile ---- */
+/* ---- Mobile: nav wrap ---- */
 @media(max-width:700px){
   .main-nav ul{flex-direction:column;background:transparent;gap:0.15rem}
   .site-header .wrap{flex-direction:column;align-items:stretch}
-  .dropdown .dropdown-menu{position:static;box-shadow:none;padding:0.2rem 0;border-radius:6px}
+  /* mobile dropdown handled above (position:static) */
 }
