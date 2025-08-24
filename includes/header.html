@@ -16,7 +16,7 @@
       <ul>
         <li><a href="index.html">Start</a></li>
 
-        <!-- Dropdown: Button + Liste.
+<!--  davor, 24.08.       <!-- Dropdown: Button + Liste.
              Wichtig: button steuert das Menü (aria-expanded), Links sind normale <a>-Elemente -->
         <li class="dropdown" aria-haspopup="true" aria-expanded="false">
           <button class="dropbtn" aria-controls="ueber-sub" aria-expanded="false" type="button">Über uns ▾</button>
@@ -24,7 +24,22 @@
             <li role="none"><a role="menuitem" href="chronik.html">Chronik</a></li>
             <li role="none"><a role="menuitem" href="vorstaende.html">Vorstände</a></li>
           </ul>
-        </li>
+        </li> 
+-->
+
+      <!-- Dropdown 'Über uns' -->
+        <li class="dropdown" aria-haspopup="true">
+          <!-- Button zum Öffnen (wichtig für Touch / Keyboard) -->
+          <button class="dropbtn" aria-expanded="false" aria-controls="ueber-sub" type="button">
+            Über uns ▾
+          </button>
+
+          <!-- Untermenü -->
+          <ul id="ueber-sub" class="dropdown-menu" role="menu" aria-label="Unterseiten Über uns">
+            <li role="none"><a role="menuitem" href="chronik.html">Chronik</a></li>
+            <li role="none"><a role="menuitem" href="vorstaende.html">Vorstände</a></li>
+          </ul>
+        </li> 
 
         <li><a href="steckerlfisch.html">Steckerlfisch</a></li>
         <li><a href="unterstuetz-uns.html">Unterstütz' uns</a></li>
