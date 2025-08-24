@@ -54,54 +54,56 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background
    - ersetzt die mehrfachen/konfligierenden Regeln
    - funktioniert per :hover (Desktop) und per .open (Touch/JS)
    =============================== */
+/* ==== DROPDOWN (robust für Desktop + Mobile) ==== */
 
-.dropdown {
-  position: relative;  /* Referenz für das absolut positionierte Menü */
-  z-index: 1000;       /* steht über anderen Elementen */
+/* Stelle sicher, dass Header Elemente nicht das Dropdown clippen */
+.site-header, .site-header .wrap {
+  overflow: visible; /* WICHTIG: verhindert Abschneiden / Clipping des absolut positionierten Menüs */
 }
 
-/* Grundregel: Menü versteckt. Sichtbar per :hover (Desktop), .open (JS) oder :focus-within (Keyboard) */
+/* Positionierung & Stacking */
+.dropdown {
+  position: relative;
+  z-index: 9999; /* hoch genug, damit das Menü oberhalb anderer Elemente liegt */
+}
+
+/* Das Dropdown-Menü: direkt angrenzend (kein Abstand), pointer-events aktiv */
 .dropdown .dropdown-menu {
   position: absolute;
-  top: calc(100% + 6px);
+  top: 100%;               /* WICHTIG: direkt an die Unterkante des Parent <li> anschließen (keine Lücke) */
   left: 0;
   min-width: 200px;
-  width: max-content;               /* passt sich an längsten Eintrag an */
-  background: var(--dropdown-bg);   /* dunkleres, gut lesbares Grün */
+  width: max-content;
+  background: #066a57;     /* dunkles Grün für gute Lesbarkeit */
   color: #fff;
   border-radius: 8px;
   box-shadow: 0 8px 22px rgba(0,0,0,0.13);
-  display: none;                    /* sichtbar durch eine der Bedingungen weiter unten */
-  padding: 0.35rem 0;
+  display: none;           /* wird sichtbar durch :hover / .open / :focus-within */
+  padding: 0.25rem 0;
   pointer-events: auto;
+  z-index: 9999;           /* doppelt abgesichert */
 }
 
-/* Menülinks: vollflächig anklickbar */
+/* Menuitems */
 .dropdown .dropdown-menu a {
   display: block;
   padding: 0.55rem 1rem;
   color: #fff;
   text-decoration: none;
-  font-size: 0.95rem;
 }
-
-/* Hover / Focus Zustand für Menüitems */
 .dropdown .dropdown-menu a:hover,
 .dropdown .dropdown-menu a:focus {
-  background: var(--dropdown-hover-overlay);
-  outline: none;
+  background: rgba(255,255,255,0.06);
 }
 
-/* Desktop: Hover zeigt Menü */
-@media (min-width: 900px) {
-  .dropdown:hover .dropdown-menu { display: block; }
-}
-
-/* Wenn JS .open an das .dropdown setzt (Touch/Click), ist das Menü sichtbar */
+/* Sichtbar machen: Desktop Hover + Touch/JS + Keyboard */
+.dropdown:hover > .dropdown-menu,
 .dropdown.open > .dropdown-menu,
-.dropdown .dropdown-menu.open { display: block; }
+.dropdown:focus-within > .dropdown-menu {
+  display: block;
+}
 
-/* Mobile: Menü wird statisch (fällt in den Fluss), damit es gut auf kleinen Bildschirmen funktioniert */
+/* Mobile: kein absolute positioning (fließt mit) — vermeidet Positionierungsprobleme auf sehr kleinen Viewports */
 @media (max-width: 700px) {
   .dropdown .dropdown-menu {
     position: static;
@@ -109,20 +111,6 @@ body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;color:#222;background
     padding: 0.2rem 0;
     border-radius: 6px;
   }
-}
-
-/* neu für Pfeile im Dropdown-Menü */
-
-/* Pfeil-Symbol für Dropdown-Button */
-.dropbtn::after {
-  content: " ▾";
-  font-size: 0.8em;
-}
-
-/* Wenn offen, Pfeil nach oben */
-.dropdown.open > .dropbtn::after,
-.dropdown:hover > .dropbtn::after {
-  content: " ▴";
 }
 
 /* ===============================
