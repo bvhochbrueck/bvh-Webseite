@@ -11,6 +11,8 @@
   <link rel="icon" href="/assets/images/logo.png" type="image/png">
 
   <link rel="stylesheet" href="/assets/css/style.css">
+  <!-- NEU für Dropdown: -->
+  <script src="/assets/js/nav.js"></script>
 </head>
 <body class="page-other has-bg">
 
@@ -48,7 +50,7 @@
       });
     }
 
-    (async function init(){ await loadInclude('site-header','/includes/header.html'); await loadInclude('site-footer','/includes/footer.html'); markActiveNav(); setupDropdowns(); })();
+    (async function init(){ await loadInclude('site-header','/includes/header.html'); await loadInclude('site-footer','/includes/footer.html'); markActiveNav(); setupDropdowns(); initNav(); })();
   </script>
 </body>
 </html>
