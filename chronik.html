@@ -30,8 +30,11 @@
     async function loadInclude(id, path){
       const el = document.getElementById(id);
       if(!el) return;
-      try { const r = await fetch(path); if(!r.ok) return; el.innerHTML = await r.text();
-        const yearSpan = document.getElementById('year'); if(yearSpan) yearSpan.textContent = new Date().getFullYear();
+      try { const r = await fetch(path); 
+           if(!r.ok) return; 
+           el.innerHTML = await r.text();
+           const yearSpan = document.getElementById('year'); 
+           if(yearSpan) yearSpan.textContent = new Date().getFullYear();
       } catch(e){ console.warn(e); }
     }
     function markActiveNav(){
