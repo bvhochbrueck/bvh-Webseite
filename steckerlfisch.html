@@ -93,6 +93,10 @@
     const releaseDate = new Date(2025, 8, 14); //14.9.25 
     const now = new Date();
 
+    // Datum automatisch ins HTML schreiben
+    const dateOptions = { day: 'numeric', month: 'long',  year: 'numeric' };
+    document.getElementById('release-date').textContent = releaseDate.toLocaleDateString('de-DE', dateOptions);
+
     if (now < releaseDate) {
       // Seite ist noch gesperrt, zeige Hinweis 
       document.getElementById('content'.style.display = 'none';
