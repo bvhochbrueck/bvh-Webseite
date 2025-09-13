@@ -19,7 +19,7 @@
       display: none;
       text-align: center;
       padding: 80px 20px;
-      background: 'fff8e1; /* sanftes gelb*/ 
+      background: #fff8e1; /* sanftes gelb*/ 
       border: 2px solid #e0a800; 
       border-radius: 12px;
       max-width: 600px;
@@ -35,7 +35,7 @@
     }
 
     #locked p {
-      font-sice: 1.2rem; 
+      font-size: 1.2rem; 
       color: #333;
     }
 
@@ -84,7 +84,7 @@
   
   <div id="locked">
     <h1> ⚠️ Seite gesperrt! </h1>
-    <p>Diese Seite ist erst ab dem <strong id="releaseDate"></strong> verfügbar.</p>
+    <p>Diese Seite ist erst ab dem <strong id="release-date"></strong> verfügbar.</p>
   </div>
 
   <script src="/assets/js/nav.js"></script>
@@ -99,12 +99,12 @@
 
     if (now < releaseDate) {
       // Seite ist noch gesperrt, zeige Hinweis 
-      document.getElementById('content'.style.display = 'none';
-      document.getElementById('locked'.style.display = 'block';
+      document.getElementById('content').style.display = 'none';
+      document.getElementById('locked').style.display = 'block';
     } else {
       // Seite ist freigegeben, zeige normalen Inhalt 
-      document.getElementById('content'.style.display = 'block';
-      document.getElementById('locked'.style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('locked').style.display = 'none';
     }
   </script>
 
