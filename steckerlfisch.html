@@ -1,4 +1,4 @@
-<!-- steckerlfisch.html -->
+<!-- steckerlfisch.html (korrigiert) -->
 <!doctype html>
 <html lang="de">
 <head>
@@ -13,17 +13,20 @@
   <!-- Zentrale CSS (enthält jetzt auch die Form-Styles) -->
   <link rel="stylesheet" href="/assets/css/style.css">
 
-  <style> 
-    /* Hinweis-banner zentriert und im Design passend */
+  <!-- Nav JS: mit defer geladen, damit die Funktionen verfügbar sind nachdem das DOM geparst ist -->
+  <script src="/assets/js/nav.js" defer></script>
+
+  <style>
+    /* Hinweis-Banner zentriert und im Design passend (korrigierte Syntax) */
     #locked {
       display: none;
       text-align: center;
       padding: 80px 20px;
-      background: #fff8e1; /* sanftes gelb*/ 
-      border: 2px solid #e0a800; 
+      background: #fff8e1; /* sanftes Gelb */
+      border: 2px solid #e0a800;
       border-radius: 12px;
       max-width: 600px;
-      margin: 100px auto; 
+      margin: 100px auto;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       font-family: sans-serif;
     }
@@ -31,31 +34,34 @@
     #locked h1 {
       font-size: 2rem;
       margin-bottom: 10px;
-      color: #b58900; /* warmes orange-braun */ 
+      color: #b58900; /* warmes Orange-Braun */
     }
 
     #locked p {
-      font-size: 1.2rem; 
+      font-size: 1.2rem; /* Rechtschreibung korrigiert */
       color: #333;
     }
 
-    /* Normaler Seiteninhalt, wird standardmäßig angezeigt */
-    #content { 
-      display: block;
-    } 
+    /* Normaler Seiteninhalt: standardmäßig ausgeblendet, damit kein FOUC (Flash of content) passiert.
+       Das Skript zeigt das passende Element (content oder locked). */
+    #content {
+      display: none;
+    }
 
-    
+    /* Optional: kleine Responsivity-Anpassung für das Banner */
+    @media (max-width:600px) {
+      #locked { margin: 40px 16px; padding: 36px 14px; }
+      #locked h1 { font-size: 1.5rem; }
+      #locked p { font-size: 1rem; }
+    }
   </style>
-
-  <!-- Nav JS (enthält initNav()) -->
-  <script src="/assets/js/nav.js"></script>
 </head>
 <body class="page-other has-bg">
 
   <!-- Header wird per include eingefügt -->
   <div id="site-header"></div>
 
-  <!-- NEU für Datums-Blockierung: id="content" -->
+  <!-- NEU für Datums-Blockierung: id="content" (wird vom Script angezeigt wenn freigegeben) -->
   <main id="content" class="container">
     <h1>Steckerlfisch</h1>
     <p>Hier kannst du deine Steckerlfisch-Bestellungen für Karfreitag abgeben.</p>
@@ -74,51 +80,50 @@
     </div>
 
     <p class="form-alt">
-      Formular nicht sichtbar? 
+      Formular nicht sichtbar?
       <a href="https://forms.gle/Yy2mfJ7rFSqrCb9A8" target="_blank" rel="noopener">Formular im neuen Tab öffnen</a>
     </p>
   </main>
 
-  
-  <!-- gesperrte Ansicht --> 
-  
-  <div id="locked">
-    <h1> ⚠️ Seite gesperrt! </h1>
+  <!-- Gesperrte Ansicht (Textdatum wird automatisch gesetzt) -->
+  <div id="locked" aria-hidden="true">
+    <h1>⚠️ Seite gesperrt!</h1>
     <p>Diese Seite ist erst ab dem <strong id="release-date"></strong> verfügbar.</p>
   </div>
 
-  <script src="/assets/js/nav.js"></script>
-  <script> 
-    //Datum der Freigabe (Jahr, Monat-1,Tag) 
-    const releaseDate = new Date(2026, 0, 1); //14.9.25 
+  <!-- SCRIPT: Datumsprüfung -->
+  <script>
+    // Konfiguration: Freigabe-Datum einstellen (Jahr, Monat-1, Tag)
+    const releaseDate = new Date(2026, 0, 1); // 1. Januar 2026
     const now = new Date();
 
-    // Datum automatisch ins HTML schreiben
-    const dateOptions = { day: 'numeric', month: 'long',  year: 'numeric' };
-    document.getElementById('release-date').textContent = releaseDate.toLocaleDateString('de-DE', dateOptions);
+    // Schreibe das lesbare Datum automatisch in den Hinweistext
+    const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    const releaseDateEl = document.getElementById('release-date');
+    if (releaseDateEl) {
+      releaseDateEl.textContent = releaseDate.toLocaleDateString('de-DE', dateOptions);
+    }
+
+    // Sichtbarkeits-Logik (sicherheitsorientiert, prüft, ob die Elemente existieren)
+    const contentEl = document.getElementById('content');
+    const lockedEl = document.getElementById('locked');
 
     if (now < releaseDate) {
-      // Seite ist noch gesperrt, zeige Hinweis 
-      document.getElementById('content').style.display = 'none';
-      document.getElementById('locked').style.display = 'block';
+      // noch gesperrt
+      if (contentEl) contentEl.style.display = 'none';
+      if (lockedEl) lockedEl.style.display = 'block';
     } else {
-      // Seite ist freigegeben, zeige normalen Inhalt 
-      document.getElementById('content').style.display = 'block';
-      document.getElementById('locked').style.display = 'none';
+      // freigegeben
+      if (lockedEl) lockedEl.style.display = 'none';
+      if (contentEl) contentEl.style.display = 'block';
     }
   </script>
 
-
-  
-
+  <!-- Footer wird per include geladen und initNav() wird anschließend in initPage() gestartet -->
   <div id="site-footer"></div>
 
   <script>
-    /* 
-      WICHTIG: Wir müssen warten, bis Header & Footer per fetch() geladen sind,
-      bevor wir initNav() (in /assets/js/nav.js) aufrufen.
-      Deshalb: await loadInclude(...).
-    */
+    // Lade Header & Footer per fetch + initNav() aufrufen (wie bereits etabliert)
     async function loadInclude(id, path){
       const el = document.getElementById(id);
       if(!el) return;
@@ -132,12 +137,12 @@
     }
 
     (async function initPage(){
-      // Lade Header + Footer (wartet, bis fertig)
+      // Header + Footer einfügen
       await loadInclude('site-header','/includes/header.html');
       await loadInclude('site-footer','/includes/footer.html');
 
-      // Jetzt initNav() aus nav.js aufrufen — markiert aktive Links und setzt Dropdown-Click.
-      if(typeof initNav === 'function'){
+      // initNav() aus nav.js aufrufen (nav.js ist via defer geladen, also verfügbar)
+      if (typeof initNav === 'function') {
         initNav();
       } else {
         console.warn('initNav() nicht gefunden. Prüfe /assets/js/nav.js');
