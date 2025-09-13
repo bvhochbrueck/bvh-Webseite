@@ -13,6 +13,40 @@
   <!-- Zentrale CSS (enthält jetzt auch die Form-Styles) -->
   <link rel="stylesheet" href="/assets/css/style.css">
 
+  <style> 
+    /* Hinweis-banner zentriert und im Design passend */
+    #locked {
+      display: none;
+      text-align: center;
+      padding: 80px 20px;
+      background: 'fff8e1; /* sanftes gelb*/ 
+      border: 2px solid #e0a800; 
+      border-radius: 12px;
+      max-width: 600px;
+      margin: 100px auto; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-family: sans-serif;
+    }
+
+    #locked h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #b58900; /* warmes orange-braun */ 
+    }
+
+    #locked p {
+      font-sice: 1.2rem; 
+      color: #333;
+    }
+
+    /* Normaler Seiteninhalt, wird standardmäßig angezeigt */
+    #content { 
+      display: block;
+    } 
+
+    
+  </style>
+
   <!-- Nav JS (enthält initNav()) -->
   <script src="/assets/js/nav.js"></script>
 </head>
@@ -21,7 +55,8 @@
   <!-- Header wird per include eingefügt -->
   <div id="site-header"></div>
 
-  <main class="container">
+  /* NEU für Datums-Nlockierung: id="content" */
+  <main id="content" class="container">
     <h1>Steckerlfisch</h1>
     <p>Hier kannst du deine Steckerlfisch-Bestellungen für Karfreitag abgeben.</p>
 
@@ -43,6 +78,34 @@
       <a href="https://forms.gle/Yy2mfJ7rFSqrCb9A8" target="_blank" rel="noopener">Formular im neuen Tab öffnen</a>
     </p>
   </main>
+
+  
+  <!-- gesperrte Ansicht --> 
+  
+  <div id="locked">
+    <h1> ⚠️ Seite gesperrt! </h1>
+    <p>Diese Seite ist erst ab dem <strong id="releaseDate"></strong> verfügbar.</p>
+  </div>
+
+  <script src="/assets/js/nav.js"></script>
+  <script> 
+    //Datum der Freigabe (Jahr, Monat-1,Tag) 
+    const releaseDate = new Date(2025, 8, 14); //14.9.25 
+    const now = new Date();
+
+    if (now < releaseDate) {
+      // Seite ist noch gesperrt, zeige Hinweis 
+      document.getElementById('content'.style.display = 'none';
+      document.getElementById('locked'.style.display = 'block';
+    } else {
+      // Seite ist freigegeben, zeige normalen Inhalt 
+      document.getElementById('content'.style.display = 'block';
+      document.getElementById('locked'.style.display = 'none';
+    }
+  </script>
+
+
+  
 
   <div id="site-footer"></div>
 
