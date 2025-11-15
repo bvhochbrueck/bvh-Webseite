@@ -189,8 +189,8 @@ body.has-bg::before{
 .qr-code {
   width: 25%;    /* z.B. 1/4 der Containerbreite */
   height: auto;
-  max-width: 200px;  /* nicht zu groß */
-  min-width: 100px;  /* nicht zu klein */
+  max-width: 400px;  /* nicht zu groß */
+  min-width: 200px;  /* nicht zu klein */
 }
 
 
