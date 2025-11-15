@@ -187,7 +187,7 @@ body.has-bg::before{
 
 /* 15.11.25: Qr-Code für Spendenseite skalieren */ 
 .qr-code {
-  width: 25%;    /* z.B. 1/4 der Containerbreite */
+  width: 50%;    /* z.B. 1/2 der Containerbreite */
   height: auto;
   max-width: 400px;  /* nicht zu groß */
   min-width: 200px;  /* nicht zu klein */
