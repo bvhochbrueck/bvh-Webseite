@@ -192,7 +192,7 @@ body.has-bg::before{
   max-width: 400px;  /* nicht zu groß */
   min-width: 200px;  /* nicht zu klein */
   display: block;      /* wichtig! */
-  margin-right: auto;   /* schiebt es nach rechts */
+  margin-right: auto;   /* schiebt es nach links */
 }
 
 
