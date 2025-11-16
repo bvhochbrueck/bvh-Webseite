@@ -191,6 +191,8 @@ body.has-bg::before{
   height: auto;
   max-width: 400px;  /* nicht zu groß */
   min-width: 200px;  /* nicht zu klein */
+  display: block;      /* wichtig! */
+  margin-left: auto;   /* schiebt es nach rechts */
 }
 
 
