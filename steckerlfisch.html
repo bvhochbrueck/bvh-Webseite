@@ -92,7 +92,9 @@
   <!-- Gesperrte Ansicht (Textdatum wird automatisch gesetzt) -->
   <div id="locked" aria-hidden="true">
     <h1>⚠️ Seite gesperrt!</h1>
-    <p>Diese Seite ist erst wieder ab dem <strong id="release-date"></strong> verfügbar.</p>
+    <p>Leider z spat ! Nächstes moi schaust friarer, dass'd an Fisch bstellst. </p>
+    <p>Diese Seite ist erst wieder 2027 verfügbar.</p>
+    <!-- <p>Diese Seite ist erst wieder ab dem <strong id="release-date"></strong> verfügbar.</p> -->
     <p>Bei Problemen bitte bei uns melden: 
       <a href="mailto:bestellung.bvh@gmail.com">bestellung.bvh@gmail.com</a>
     </p>
@@ -116,7 +118,7 @@
     const contentEl = document.getElementById('content');
     const lockedEl = document.getElementById('locked');
 
-    if (now < releaseDate) {
+    if (now > releaseDate) {
       // noch gesperrt
       if (contentEl) contentEl.style.display = 'none';
       if (lockedEl) lockedEl.style.display = 'block';
